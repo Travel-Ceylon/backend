@@ -2,8 +2,6 @@ import mongoose from "mongoose";
 
 const TaxiSchema = new mongoose.Schema({
   driverName: { type: String, required: true },
-  driverBio: { type: String }, //field about the driver's bio
-  description: { type: String }, //vehicle description
   nic: { type: String, required: true },
   drivingId: { type: String, required: true },
   profilePic: { type: String },
