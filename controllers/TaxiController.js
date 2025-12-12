@@ -29,6 +29,8 @@ export const registerTaxi = async (req, res) => {
 
     const {
       driverName,
+      driverBio,
+      description,
       nic,
       drivingId,
       nicImg,
@@ -42,10 +44,13 @@ export const registerTaxi = async (req, res) => {
       vehicleNo,
       province,
       vehicleType,
+      images,
     } = req.body;
 
     const taxiUser = await taxiModel.create({
       driverName,
+      driverBio,
+      description,
       nic,
       drivingId,
       nicImg,
@@ -59,6 +64,7 @@ export const registerTaxi = async (req, res) => {
       vehicleNo,
       province,
       vehicleType,
+      images,
     });
 
     provider.serviceId = taxiUser._id;
@@ -92,7 +98,7 @@ export const getTaxiProfile = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Taxi profile not found" });
 
-    res.status(200).json({ success: true, data: taxi });
+    return res.status(200).json({ success: true, data: taxi });
   } catch (error) {
     console.error(error);
     res
