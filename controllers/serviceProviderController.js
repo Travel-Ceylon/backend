@@ -1,7 +1,9 @@
 import { generateToken } from "../config/generateToken.js";
 import serviceProviderModel from "../models/ServiceProvider.js";
 import bcrypt from "bcryptjs";
+import taxi from "../models/Taxi.js";
 
+//register a provider
 export const register = async (req, res) => {
   try {
     const { email, password, serviceType, serviceId, verify } = req.body;
@@ -164,6 +166,8 @@ export const logout = async (req, res) => {
   }
 };
 
+//function that returns the providers data(email,password change)
+//calls with getProviderProfile() in taxiStore();
 export const getMe = async (req, res) => {
   try {
     if (req.role !== "provider") {
@@ -173,7 +177,9 @@ export const getMe = async (req, res) => {
       });
     }
 
-    const provider = await serviceProviderModel.findById(req.user).select("-password");
+    const provider = await serviceProviderModel
+      .findById(req.user)
+      .select("-password");
     if (!provider) {
       return res.status(404).json({
         success: false,
@@ -185,7 +191,7 @@ export const getMe = async (req, res) => {
       success: true,
       message: "Profile fetched successfully.",
       data: {
-        profile: provider,
+        profile: provider, // Contains base provider info (Account Tab data)
         role: "provider",
       },
     });

@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const TaxiSchema = new mongoose.Schema({
+  providerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ServiceProvider",
+    required: true,
+  },
   driverName: { type: String, required: true },
   nic: { type: String, required: true },
   drivingId: { type: String, required: true },
@@ -15,7 +20,13 @@ const TaxiSchema = new mongoose.Schema({
   province: String,
   vehicleType: { type: String, required: true },
   perKm: { type: Number, required: true },
-  location: { type: String, required: true },
+  model: { type: String, required: true },
+  city: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  fuelType: { type: String, required: true },
 });
 
 const taxi = mongoose.model("Taxi", TaxiSchema);

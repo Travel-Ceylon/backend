@@ -5,15 +5,18 @@ const ServiceProviderSchema = new mongoose.Schema({
   password: { type: String, required: true },
   serviceType: {
     type: String,
-    enum: ["Taxi", "Stays", "Rent", "Guide"]
+    enum: ["Taxi", "Stays", "Rent", "Guide"],
   },
   serviceId: {
     type: mongoose.Schema.Types.ObjectId,
-    refPath: "serviceType"
+    refPath: "serviceType",
   },
   verify: { type: Boolean, default: false },
 });
 
-const serviceProvider = mongoose.model("ServiceProvider", ServiceProviderSchema);
+const serviceProvider = mongoose.model(
+  "ServiceProvider",
+  ServiceProviderSchema
+);
 
 export default serviceProvider;
