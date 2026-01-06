@@ -46,6 +46,7 @@ export const register = async (req, res) => {
         serviceId: user.serviceId,
         verify: user.verify,
         role: "provider",
+        token,
       },
     });
   } catch (error) {
@@ -136,6 +137,7 @@ export const login = async (req, res) => {
         serviceId: user.serviceId,
         verify: user.verify,
         role: "provider",
+        token,
       },
     });
   } catch (error) {

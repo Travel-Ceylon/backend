@@ -39,7 +39,8 @@ export const register = async (req, res) => {
         email: user.email,
         phone: user.phone,
         profilePic: user.profilePic,
-        role: "user"
+        role: "user",
+        token
       }
     );
 
@@ -69,12 +70,13 @@ export const login = async (req, res) => {
     });
 
     res.status(200).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        profilePic: user.profilePic,
-        role: "user"
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      profilePic: user.profilePic,
+      role: "user",
+      token
     });
 
   } catch (error) {
