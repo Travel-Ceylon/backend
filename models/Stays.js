@@ -22,12 +22,12 @@ const StaySchema = new mongoose.Schema({
     swimmingPool: { type: Boolean, default: false },
     waterPark: { type: Boolean, default: false }
   },
-  rooms: [{
-    room: {
-      type: mongoose.Types.ObjectId,
-      ref: "room"
-    }
-  }],
+  rooms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+    },
+  ],
   images: [{
     type: String
   }],
