@@ -17,14 +17,16 @@ export const registerStays = async (req, res) => {
     if (!provider) {
       return res.status(404).json({
         success: false,
-        message: "Your service provider account could not be found. Please contact support.",
+        message:
+          "Your service provider account could not be found. Please contact support.",
       });
     }
 
     if (provider.serviceId) {
       return res.status(400).json({
         success: false,
-        message: "You already have a registered service. Multiple services under one account are not allowed.",
+        message:
+          "You already have a registered service. Multiple services under one account are not allowed.",
       });
     }
 
@@ -193,7 +195,7 @@ export const updateRoom = async (req, res) => {
         .json({ success: false, message: "Service provider not found" });
 
     const stay = await staysModel.findById(provider.serviceId);
-    if (!stay || !stay.rooms.includes(roomId))
+    if (!stay || !stay.rooms.some((id) => id.toString() === roomId.toString()))
       return res
         .status(403)
         .json({ success: false, message: "Not authorized" });
@@ -230,7 +232,7 @@ export const deleteRoom = async (req, res) => {
         .json({ success: false, message: "Service provider not found" });
 
     const stay = await staysModel.findById(provider.serviceId);
-    if (!stay || !stay.rooms.includes(roomId))
+    if (!stay || !stay.rooms.some((id) => id.toString() === roomId.toString()))
       return res
         .status(403)
         .json({ success: false, message: "Not authorized" });
@@ -265,10 +267,10 @@ export const getAvailableStays = async (req, res) => {
       roomFacilities,
     } = req.query;
 
-    if (!start_date || !end_date || !location) {
+    if (!location) {
       return res.status(400).json({
         success: false,
-        message: "Please provide start_date, end_date, and location",
+        message: "Please provide location",
       });
     }
 
@@ -311,19 +313,12 @@ export const getAvailableStays = async (req, res) => {
     const allStays = await staysModel.find(staysFilters).populate(roomsFilters);
 
     // bookings overlapping requested dates
-    const bookings = await staysBookingModel.find({
-      status: { $in: ["pending", "confirmed"] },
-      $or: [
-        {
-          start_date: { $lte: new Date(end_date), $gte: new Date(start_date) },
-        },
-        { end_date: { $lte: new Date(end_date), $gte: new Date(start_date) } },
-        {
-          start_date: { $lte: new Date(start_date) },
-          end_date: { $gte: new Date(end_date) },
-        },
-      ],
-    });
+    const bookings = await staysBookingModel
+      .find({
+        status: { $in: ["pending", "confirmed"] },
+        start_date: { $lte: new Date(end_date) },
+        end_date: { $gte: new Date(start_date) },
+      }).select("serviceId roomId");
 
     const result = allStays
       .map((stay) => {
